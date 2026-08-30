@@ -144,7 +144,7 @@ dir.create(here("salidas"), showWarnings = FALSE)
 ggsave(here("salidas", "01_tendencia_ipc.png"), grafico_tendencia, width = 8, height = 5, dpi = 150)
 ```
 
-```{r}
+```{r fig.width=9, fig.height=6}
 # Gráfico 2: variación mensual por división de gasto, julio 2026 (mes más reciente)
 division_julio <- divisiones %>% filter(mes == "Julio")
 grafico_divisiones <- ggplot(division_julio, aes(x = reorder(division, var_mensual), y = var_mensual)) +
@@ -161,7 +161,7 @@ grafico_divisiones
 ```
 
 
-```{r}
+```{r fig.width=9, fig.height=6}
 # Gráfico 3 (opcional): promedio de variación mensual por división, todo el periodo
 promedio_division <- divisiones %>%
   group_by(division) %>%

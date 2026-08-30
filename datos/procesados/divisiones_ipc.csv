@@ -1,0 +1,85 @@
+"fecha","mes","division","ponderacion","var_mensual","var_anio_corrido","var_anual"
+2026-01-01,"Enero","Alimentos Y Bebidas No Alcohólicas",15.05,1.66,1.66,5.11
+2026-01-01,"Enero","Alojamiento, Agua, Electricidad, Gas Y Otros Combustibles",33.12,0.23,0.23,4.59
+2026-01-01,"Enero","Bebidas Alcohólicas Y Tabaco",1.7,1.79,1.79,7.58
+2026-01-01,"Enero","Bienes Y Servicios Diversos",5.36,0.79,0.79,5.23
+2026-01-01,"Enero","Educación",4.41,0,0,7.36
+2026-01-01,"Enero","Información Y Comunicación",4.33,0.06,0.06,1.48
+2026-01-01,"Enero","Muebles, Artículos Para El Hogar Y Para La Conservación Ordinaria Del Hogar",4.19,1.5,1.5,4.12
+2026-01-01,"Enero","Prendas De Vestir Y Calzado",3.98,0.18,0.18,2.45
+2026-01-01,"Enero","Recreación Y Cultura",3.79,0.5,0.5,2.54
+2026-01-01,"Enero","Restaurantes Y Hoteles",9.43,2.94,2.94,9.01
+2026-01-01,"Enero","Salud",1.71,1.21,1.21,7.38
+2026-01-01,"Enero","Transporte",12.93,2.14,2.14,5.79
+2026-02-01,"Febrero","Alimentos Y Bebidas No Alcohólicas",15.05,1.3,2.98,5.84
+2026-02-01,"Febrero","Alojamiento, Agua, Electricidad, Gas Y Otros Combustibles",33.12,0.45,0.68,3.85
+2026-02-01,"Febrero","Bebidas Alcohólicas Y Tabaco",1.7,1.14,2.95,7.76
+2026-02-01,"Febrero","Bienes Y Servicios Diversos",5.36,1.02,1.82,5.45
+2026-02-01,"Febrero","Educación",4.41,5.64,5.64,7.44
+2026-02-01,"Febrero","Información Y Comunicación",4.33,0.01,0.07,1.51
+2026-02-01,"Febrero","Muebles, Artículos Para El Hogar Y Para La Conservación Ordinaria Del Hogar",4.19,1.23,2.75,4.73
+2026-02-01,"Febrero","Prendas De Vestir Y Calzado",3.98,0.7,0.87,2.61
+2026-02-01,"Febrero","Recreación Y Cultura",3.79,0.08,0.58,1.68
+2026-02-01,"Febrero","Restaurantes Y Hoteles",9.43,1.38,4.36,9.61
+2026-02-01,"Febrero","Salud",1.71,0.94,2.16,7.82
+2026-02-01,"Febrero","Transporte",12.93,1.07,3.24,5.27
+2026-03-01,"Marzo","Alimentos Y Bebidas No Alcohólicas",15.05,1.27,4.29,6.27
+2026-03-01,"Marzo","Alojamiento, Agua, Electricidad, Gas Y Otros Combustibles",33.12,0.85,1.54,4.15
+2026-03-01,"Marzo","Bebidas Alcohólicas Y Tabaco",1.7,-0.37,2.57,6.75
+2026-03-01,"Marzo","Bienes Y Servicios Diversos",5.36,0.95,2.79,6.09
+2026-03-01,"Marzo","Educación",4.41,0.17,5.82,7.54
+2026-03-01,"Marzo","Información Y Comunicación",4.33,2.96,3.03,4.73
+2026-03-01,"Marzo","Muebles, Artículos Para El Hogar Y Para La Conservación Ordinaria Del Hogar",4.19,0.9,3.67,5.23
+2026-03-01,"Marzo","Prendas De Vestir Y Calzado",3.98,0.19,1.06,2.61
+2026-03-01,"Marzo","Recreación Y Cultura",3.79,0.88,1.47,2.38
+2026-03-01,"Marzo","Restaurantes Y Hoteles",9.43,0.86,5.26,9.92
+2026-03-01,"Marzo","Salud",1.71,1.06,3.25,7.87
+2026-03-01,"Marzo","Transporte",12.93,-0.22,3.01,4.61
+2026-04-01,"Abril","Alimentos Y Bebidas No Alcohólicas",15.05,1.51,5.87,6.71
+2026-04-01,"Abril","Alojamiento, Agua, Electricidad, Gas Y Otros Combustibles",33.12,0.7,2.25,4.11
+2026-04-01,"Abril","Bebidas Alcohólicas Y Tabaco",1.7,0.54,3.12,6.91
+2026-04-01,"Abril","Bienes Y Servicios Diversos",5.36,0.63,3.44,6.11
+2026-04-01,"Abril","Educación",4.41,0.07,5.89,7.58
+2026-04-01,"Abril","Información Y Comunicación",4.33,-0.05,2.98,4.88
+2026-04-01,"Abril","Muebles, Artículos Para El Hogar Y Para La Conservación Ordinaria Del Hogar",4.19,1.06,4.77,5.79
+2026-04-01,"Abril","Prendas De Vestir Y Calzado",3.98,0.45,1.52,2.67
+2026-04-01,"Abril","Recreación Y Cultura",3.79,0.58,2.06,2.52
+2026-04-01,"Abril","Restaurantes Y Hoteles",9.43,0.34,5.62,9.61
+2026-04-01,"Abril","Salud",1.71,0.7,3.97,8.21
+2026-04-01,"Abril","Transporte",12.93,0.81,3.85,4.95
+2026-05-01,"Mayo","Alimentos Y Bebidas No Alcohólicas",15.05,-0.02,5.85,6.04
+2026-05-01,"Mayo","Alojamiento, Agua, Electricidad, Gas Y Otros Combustibles",33.12,0.86,3.13,4.5
+2026-05-01,"Mayo","Bebidas Alcohólicas Y Tabaco",1.7,0.27,3.39,6.78
+2026-05-01,"Mayo","Bienes Y Servicios Diversos",5.36,0.22,3.66,6.05
+2026-05-01,"Mayo","Educación",4.41,0,5.89,7.58
+2026-05-01,"Mayo","Información Y Comunicación",4.33,0.25,3.24,5.3
+2026-05-01,"Mayo","Muebles, Artículos Para El Hogar Y Para La Conservación Ordinaria Del Hogar",4.19,0.53,5.32,6.16
+2026-05-01,"Mayo","Prendas De Vestir Y Calzado",3.98,0.42,1.95,2.7
+2026-05-01,"Mayo","Recreación Y Cultura",3.79,0.77,2.84,3.84
+2026-05-01,"Mayo","Restaurantes Y Hoteles",9.43,0.38,6.02,9.62
+2026-05-01,"Mayo","Salud",1.71,0.52,4.51,8.35
+2026-05-01,"Mayo","Transporte",12.93,0.61,4.48,5.67
+2026-06-01,"Junio","Alimentos Y Bebidas No Alcohólicas",15.05,0.67,6.55,6.83
+2026-06-01,"Junio","Alojamiento, Agua, Electricidad, Gas Y Otros Combustibles",33.12,0.52,3.66,5.02
+2026-06-01,"Junio","Bebidas Alcohólicas Y Tabaco",1.7,0.5,3.91,7.02
+2026-06-01,"Junio","Bienes Y Servicios Diversos",5.36,0.3,3.97,6.12
+2026-06-01,"Junio","Educación",4.41,0,5.9,7.57
+2026-06-01,"Junio","Información Y Comunicación",4.33,-0.02,3.22,5.16
+2026-06-01,"Junio","Muebles, Artículos Para El Hogar Y Para La Conservación Ordinaria Del Hogar",4.19,0.26,5.59,6.22
+2026-06-01,"Junio","Prendas De Vestir Y Calzado",3.98,0.43,2.39,2.98
+2026-06-01,"Junio","Recreación Y Cultura",3.79,0.08,2.93,3.92
+2026-06-01,"Junio","Restaurantes Y Hoteles",9.43,0.39,6.43,9.59
+2026-06-01,"Junio","Salud",1.71,0.39,4.91,8.39
+2026-06-01,"Junio","Transporte",12.93,0.01,4.5,5.47
+2026-07-01,"Julio","Alimentos Y Bebidas No Alcohólicas",15.05,-0.13,6.41,5.82
+2026-07-01,"Julio","Alojamiento, Agua, Electricidad, Gas Y Otros Combustibles",33.12,0.55,4.23,5.4
+2026-07-01,"Julio","Bebidas Alcohólicas Y Tabaco",1.7,0.25,4.17,7.14
+2026-07-01,"Julio","Bienes Y Servicios Diversos",5.36,-0.11,3.86,5.97
+2026-07-01,"Julio","Educación",4.41,0,5.9,7.57
+2026-07-01,"Julio","Información Y Comunicación",4.33,0.04,3.26,4.97
+2026-07-01,"Julio","Muebles, Artículos Para El Hogar Y Para La Conservación Ordinaria Del Hogar",4.19,0.24,5.84,6.3
+2026-07-01,"Julio","Prendas De Vestir Y Calzado",3.98,0.31,2.71,3.38
+2026-07-01,"Julio","Recreación Y Cultura",3.79,-0.13,2.8,3.74
+2026-07-01,"Julio","Restaurantes Y Hoteles",9.43,0.3,6.75,9.53
+2026-07-01,"Julio","Salud",1.71,0.38,5.31,8.37
+2026-07-01,"Julio","Transporte",12.93,-0.24,4.25,5.21

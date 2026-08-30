@@ -1,0 +1,186 @@
+---
+title: "analisis_IPC"
+author: "Gloria Disney Restrepo Ruiz"
+date: "2026-08-29"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+# Paquetes necesarios (instalar una sola vez con install.packages(...) si hace falta)
+library(here)
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(stringr)
+library(ggplot2)
+library(scales)
+```
+
+
+```{r}
+getwd()
+```
+
+```{r}
+ruta_crudos <- here("datos", "crudos")
+
+archivos <- list.files(ruta_crudos, pattern = "^anex-IPC-.*2026\\.xlsx$", full.names = TRUE)
+archivos   # si esto sale character(0), revisa que los 7 .xlsx estén en datos/crudos/
+
+# Tabla de referencia para traducir la abreviatura del nombre de archivo a mes
+meses_lookup <- tibble(
+  abrev      = c("ene","feb","mar","abr","may","jun","jul"),
+  mes_num    = 1:7,
+  mes_nombre = c("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio")
+)
+
+extraer_abrev <- function(nombre_archivo) {
+  str_extract(basename(nombre_archivo), "(?<=anex-IPC-)[a-z]{3}(?=2026)")
+}
+```
+
+```{r}
+leer_total_mes <- function(archivo) {
+  abrev <- extraer_abrev(archivo)
+  datos <- read_excel(
+    archivo, sheet = "1", skip = 9, n_max = 10,
+    col_names = c("anio", "var_mensual", "var_anio_corrido", "var_anual")
+  )
+  datos %>%
+    filter(anio == 2026) %>%
+    mutate(mes_abrev = abrev)
+}
+
+serie_total <- map_dfr(archivos, leer_total_mes) %>%
+  left_join(meses_lookup, by = c("mes_abrev" = "abrev")) %>%
+  mutate(fecha = as.Date(paste("2026", mes_num, "01", sep = "-"))) %>%
+  arrange(fecha) %>%
+  select(fecha, mes = mes_nombre, var_mensual, var_anio_corrido, var_anual)
+
+serie_total
+```
+
+```{r}
+leer_divisiones_mes <- function(archivo) {
+  abrev <- extraer_abrev(archivo)
+  # La hoja "2" trae 11 columnas de datos (Variación, Contribución y
+  # Participación), pero solo necesitamos las 5 primeras (A:E). Por eso usamos
+  # "range" en vez de "skip", para quedarnos únicamente con esas columnas.
+  datos <- read_excel(
+    archivo, sheet = "2",
+    range = readxl::cell_limits(c(10, 1), c(21, 5)),
+    col_names = c("division", "ponderacion", "var_mensual", "var_anio_corrido", "var_anual")
+  )
+  datos %>% mutate(mes_abrev = abrev)
+}
+```
+
+```{r}
+# Este chunk faltaba: aquí sí se USA la función de arriba para construir
+# el objeto "divisiones" (antes el archivo pasaba directo a usarlo sin crearlo).
+divisiones <- map_dfr(archivos, leer_divisiones_mes) %>%
+  left_join(meses_lookup, by = c("mes_abrev" = "abrev")) %>%
+  mutate(
+    division = str_squish(division),
+    fecha = as.Date(paste("2026", mes_num, "01", sep = "-"))
+  ) %>%
+  arrange(fecha, division) %>%
+  select(fecha, mes = mes_nombre, division, ponderacion, var_mensual, var_anio_corrido, var_anual)
+
+divisiones
+```
+
+```{r}
+# Verificación: 7 meses en la serie total, 12 divisiones x 7 meses en el detalle
+nrow(serie_total)   # esperado: 7
+nrow(divisiones)    # esperado: 84
+
+# Verificación de valores faltantes
+colSums(is.na(serie_total))
+colSums(is.na(divisiones))
+
+# Guardar datos procesados
+dir.create(here("datos", "procesados"), showWarnings = FALSE)
+write.csv(serie_total, here("datos", "procesados", "serie_total_ipc.csv"), row.names = FALSE)
+write.csv(divisiones, here("datos", "procesados", "divisiones_ipc.csv"), row.names = FALSE)
+```
+
+```{r}
+summary(serie_total$var_mensual)
+summary(serie_total$var_anual)
+```
+
+
+```{r}
+# Gráfico 1: evolución de la variación mensual y anual del IPC (ene-jul 2026)
+serie_larga <- serie_total %>%
+  select(fecha, mes, var_mensual, var_anual) %>%
+  pivot_longer(cols = c(var_mensual, var_anual), names_to = "tipo", values_to = "valor") %>%
+  mutate(tipo = recode(tipo,
+    var_mensual = "Variación mensual",
+    var_anual   = "Variación anual"
+  ))
+
+grafico_tendencia <- ggplot(serie_larga, aes(x = fecha, y = valor, color = tipo)) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 2) +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+  labs(
+    title = "Variación del IPC en Colombia, enero-julio 2026",
+    subtitle = "Variación mensual vs. variación anual (interanual)",
+    x = NULL, y = "Variación (%)", color = NULL,
+    caption = "Fuente: DANE, boletines técnicos mensuales del IPC (anexos)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+
+grafico_tendencia
+dir.create(here("salidas"), showWarnings = FALSE)
+ggsave(here("salidas", "01_tendencia_ipc.png"), grafico_tendencia, width = 8, height = 5, dpi = 150)
+```
+
+```{r}
+# Gráfico 2: variación mensual por división de gasto, julio 2026 (mes más reciente)
+division_julio <- divisiones %>% filter(mes == "Julio")
+grafico_divisiones <- ggplot(division_julio, aes(x = reorder(division, var_mensual), y = var_mensual)) +
+geom_col(fill = "#2E86AB") +
+coord_flip() +
+labs(
+title = "Variación mensual del IPC por división de gasto",
+subtitle = "Julio de 2026",
+x = NULL, y = "Variación mensual (%)",
+caption = "Fuente: DANE, boletín técnico IPC julio 2026 (anexo)"
+) +
+theme_minimal(base_size = 12)
+grafico_divisiones
+```
+
+
+```{r}
+# Gráfico 3 (opcional): promedio de variación mensual por división, todo el periodo
+promedio_division <- divisiones %>%
+  group_by(division) %>%
+  summarise(var_mensual_prom = mean(var_mensual, na.rm = TRUE)) %>%
+  arrange(desc(var_mensual_prom))
+
+grafico_promedio <- ggplot(promedio_division, aes(x = reorder(division, var_mensual_prom), y = var_mensual_prom)) +
+  geom_col(fill = "#E07A5F") +
+  coord_flip() +
+  labs(
+    title = "Variación mensual promedio del IPC por división de gasto",
+    subtitle = "Promedio enero-julio 2026",
+    x = NULL, y = "Variación mensual promedio (%)",
+    caption = "Fuente: DANE, boletines técnicos IPC ene-jul 2026 (anexos)"
+  ) +
+  theme_minimal(base_size = 12)
+
+grafico_promedio
+ggsave(here("salidas", "03_promedio_divisiones.png"), grafico_promedio, width = 8, height = 5, dpi = 150)
+```
+```
+

@@ -8,7 +8,7 @@ output:
   word_document: default
 ---
 ### Chunk 1 — Librerías
-Acá cargo todos los paquetes que voy a necesitar: `here` para que las rutas de 
+Acá cargo todos los paquetes que voy a necesitar `here` para que las rutas de 
 archivo funcionen sin importar en qué computador esté trabajando, `readxl` para 
 poder leer los Excel del DANE, `dplyr` y `tidyr` para acomodar los datos, `purrr` 
 para no tener que repetir el mismo código 7 veces (una por archivo), `stringr` 
@@ -38,7 +38,7 @@ getwd()
 ### Chunk 3 — Buscar los archivos y preparar el terreno
 Aquí busco los 7 archivos Excel dentro de `datos/crudos/`. También armo una 
 tablita (`meses_lookup`) que me sirve para traducir la abreviatura del nombre del 
-archivo —tipo "jul"— al nombre completo del mes, y una función 
+archivo tipo "jul" al nombre completo del mes, y una función 
 (`extraer_abrev`) que saca esa abreviatura directamente del nombre del archivo, 
 para no tener que escribirla a mano cada vez.
 
@@ -106,7 +106,7 @@ leer_divisiones_mes <- function(archivo) {
 
 ### Chunk 6 — Armar la tabla de divisiones
 Aplico la función del chunk anterior a los 7 archivos, limpio algunos nombres de 
-división que traían espacios de más, y armo la tabla final `divisiones` — 84 
+división que traían espacios de más, y armo la tabla final `divisiones`  84 
 filas en total (12 divisiones por 7 meses).
 
 ```{r}
@@ -184,7 +184,7 @@ dir.create(here("salidas"), showWarnings = FALSE)
 ggsave(here("salidas", "01_tendencia_ipc.png"), grafico_tendencia, width = 8, height = 5, dpi = 150)
 ```
 ### Chunk 10 — Segundo gráfico: julio por división
-Me quedo solo con julio —el mes más reciente— y armo un gráfico de barras 
+Me quedo solo con julio el mes más reciente y armo un gráfico de barras 
 mostrando cuánto subió o bajó cada división ese mes, de mayor a menor.
 
 ```{r fig.width=9, fig.height=6}

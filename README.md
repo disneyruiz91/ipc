@@ -5,22 +5,22 @@ Trabajo aplicado individual — Preparación digital
 ## De qué se trata esto
 
 Quería armar, de principio a fin, un flujo de trabajo con el que cualquiera
-pueda repetir lo que hice: descargar los datos, limpiarlos, explorarlos y
-sacarles unos gráficos. Trabajé con el **Índice de Precios al Consumidor
-(IPC)** que publica el DANE cada mes, y con lo que fui encontrando, se me
+pueda repetir lo que hice descargar los datos, limpiarlos, explorarlos y
+sacarles unos gráficos. Trabajé con el Índice de Precios al Consumidor
+(IPC) que publica el DANE cada mes, y con lo que fui encontrando, se me
 ocurrió una idea de intervención que también dejo planteada aquí.
 
 ## De dónde saqué los datos
 
-Usé los boletines técnicos que publica el DANE cada mes con el IPC — los
-llaman "anexos" y se pueden descargar directamente de su página, sin
-necesidad de ninguna clave ni permiso especial:
+Usé los boletines técnicos que publica el DANE cada mes con el IPC  los
+llaman anexos y se pueden descargar directamente de su página, sin
+necesidad de ninguna clave ni permiso especial
 
 https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc/ipc-historico
 
 Tomé los siete meses que iban de enero a julio de 2026. Cada anexo viene en
 Excel y trae, entre otras cosas, la variación del IPC total (en una hoja) y
-el detalle por cada tipo de gasto —vivienda, alimentos, transporte, etc.—
+el detalle por cada tipo de gasto - vivienda, alimentos, transporte, etc.
 en otra. Junté los siete archivos para armar una sola serie mensual.
 
 ## Cómo dejé organizada la carpeta
@@ -49,7 +49,7 @@ ipc/
   sin editarlos a mano.
 - **`datos/procesados/`**: los datos ya limpios y juntos, listos para usar.
   Estos los genera solo el notebook, no los toco directamente.
-- **`notebook/`**: el código en R, donde está todo el trabajo — leer los
+- **`notebook/`**: el código en R, donde está todo el trabajo  leer los
   archivos, limpiarlos, sacar estadísticas y hacer los gráficos.
 - **`documentacion/`**: el informe escrito, con lo que encontré y la idea
   de intervención.

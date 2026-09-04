@@ -231,4 +231,3 @@ grafico_promedio
 ggsave(here("salidas", "03_promedio_divisiones.png"), grafico_promedio, width = 8, height = 5, dpi = 150)
 ```
 ```
-

@@ -1,117 +1,143 @@
 # Flujo de trabajo reproducible: IPC Colombia (DANE)
 
-Trabajo aplicado individual — Preparación digital 
+Trabajo aplicado individual — Preparación digital
 
-## Objetivo
+## De qué se trata esto
 
-Construir un flujo de trabajo reproducible de extremo a extremo (adquisición → limpieza →
-análisis exploratorio → visualización) sobre el **Índice de Precios al Consumidor (IPC)**
-publicado por el DANE, y plantear una idea de intervención a partir de los hallazgos.
+Quería armar, de principio a fin, un flujo de trabajo con el que cualquiera
+pueda repetir lo que hice: descargar los datos, limpiarlos, explorarlos y
+sacarles unos gráficos. Trabajé con el **Índice de Precios al Consumidor
+(IPC)** que publica el DANE cada mes, y con lo que fui encontrando, se me
+ocurrió una idea de intervención que también dejo planteada aquí.
 
-## Fuente de datos
+## De dónde saqué los datos
 
-- **Entidad:** DANE (Departamento Administrativo Nacional de Estadística)
-- **Serie:** Índice de Precios al Consumidor (IPC) — boletines técnicos mensuales (archivo "Anexo")
-- **Periodo cubierto:** enero a julio de 2026 (7 archivos, uno por mes)
-- **Página oficial:** https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc/ipc-historico
-- **Formato:** Excel (.xlsx), descarga directa, sin necesidad de API ni credenciales
-- **Nota:** cada archivo anexo trae, entre otras hojas, la variación del IPC total
-  (hoja "1") y el detalle por división de bienes y servicios (hoja "2")
-  correspondientes a ese mes. El notebook combina los 7 archivos para construir
-  la serie mensual enero-julio 2026.
+Usé los boletines técnicos que publica el DANE cada mes con el IPC — los
+llaman "anexos" y se pueden descargar directamente de su página, sin
+necesidad de ninguna clave ni permiso especial:
 
-## Estructura de carpetas
+https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc/ipc-historico
+
+Tomé los siete meses que iban de enero a julio de 2026. Cada anexo viene en
+Excel y trae, entre otras cosas, la variación del IPC total (en una hoja) y
+el detalle por cada tipo de gasto —vivienda, alimentos, transporte, etc.—
+en otra. Junté los siete archivos para armar una sola serie mensual.
+
+## Cómo dejé organizada la carpeta
 
 ```
 ipc/
-├── ipc.Rproj                      <- proyecto de RStudio (ábrelo con doble clic)
+├── ipc.Rproj                      <- el proyecto de RStudio (ábrelo con doble clic)
 ├── README.md                      <- este archivo
 ├── datos/
-│   ├── crudos/                    <- los 7 archivos .xlsx descargados del DANE, SIN modificar
+│   ├── crudos/                    <- los 7 Excel tal como los bajé del DANE, sin tocar
 │   │                                  (anex-IPC-ene2026.xlsx ... anex-IPC-jul2026.xlsx)
-│   └── procesados/                <- datos limpios y combinados (salida del notebook):
-│                                      serie_total_ipc.csv, divisiones_ipc.csv
+│   └── procesados/                <- ya limpios: serie_total_ipc.csv, divisiones_ipc.csv
 ├── notebook/
-│   └── analisis_ipc.Rmd           <- flujo completo: carga, limpieza, EDA, visualización
+│   └── analisis_ipc.Rmd           <- todo el trabajo: cargar, limpiar, explorar, graficar
 ├── documentacion/
-│   └── informe_tecnico.Rmd        <- informe técnico (máx. 6 páginas), con las 6 secciones
-└── salidas/
-    └── (gráficos .png generados por el notebook: 01_tendencia_ipc.png,
-         02_divisiones_julio.png, 03_promedio_divisiones.png)
+│   └── informe_tecnico.Rmd        <- el informe escrito
+├── salidas/
+│   └── (los gráficos en .png que salen del notebook)
+└── entrega/
+    └── entrega_informe_ipc.pdf    <- el informe ya terminado, listo para entregar
 ```
 
-## Qué contiene cada carpeta
+## Qué hay en cada carpeta
 
-- **`datos/crudos/`**: los archivos originales del DANE, exactamente como se descargaron,
-  sin ninguna edición manual. Son la única fuente de verdad de los datos crudos.
-- **`datos/procesados/`**: los datos ya limpios, combinados en dos tablas (`serie_total_ipc.csv`
-  con la variación mensual del IPC total, y `divisiones_ipc.csv` con el detalle por división
-  de gasto). Se generan automáticamente al correr el notebook — no se editan a mano.
-- **`notebook/`**: el código en R que hace todo el trabajo: lee los archivos crudos, los limpia,
-  calcula estadísticas descriptivas y genera las visualizaciones.
-- **`documentacion/`**: el informe técnico final en formato Rmd (y su versión en PDF una vez
-  generado), con la interpretación de los resultados y la idea de intervención.
-- **`salidas/`**: las imágenes de los gráficos generados por el notebook, usadas tanto en el
-  informe técnico como en el dashboard/visualización final.
+- **`datos/crudos/`**: los Excel originales, exactamente como los descargué,
+  sin editarlos a mano.
+- **`datos/procesados/`**: los datos ya limpios y juntos, listos para usar.
+  Estos los genera solo el notebook, no los toco directamente.
+- **`notebook/`**: el código en R, donde está todo el trabajo — leer los
+  archivos, limpiarlos, sacar estadísticas y hacer los gráficos.
+- **`documentacion/`**: el informe escrito, con lo que encontré y la idea
+  de intervención.
+- **`salidas/`**: las imágenes de los gráficos, las mismas que uso en el
+  informe y en la sustentación.
+- **`entrega/`**: la versión final del informe, ya en PDF.
 
-## Pasos exactos para reproducir el flujo completo
+## Cómo repetir lo que hice, paso a paso
 
-1. **Descargar los datos crudos**
-   - Ir a la página oficial del DANE (enlace arriba) → boletines técnicos mensuales del IPC
-     → descargar el archivo "Anexo" (.xlsx) de cada mes que se quiera incluir.
-   - Guardar los 7 archivos, sin modificarlos, en `datos/crudos/` con sus nombres originales
-     (ej. `anex-IPC-ene2026.xlsx`, `anex-IPC-feb2026.xlsx`, ..., `anex-IPC-jul2026.xlsx`).
+1. **Bajar los datos**
+   Entrar a la página del DANE (el enlace de arriba) y descargar el archivo
+   "Anexo" de cada mes que se quiera incluir. Guardarlos, sin tocarlos, en
+   `datos/crudos/`, con sus nombres originales.
 
 2. **Abrir el proyecto en RStudio**
-   - **Importante:** abrir el proyecto haciendo doble clic en `ipc.Rproj` (no abrir el .Rmd
-     suelto desde el explorador de archivos). Esto asegura que las rutas a los datos
-     funcionen igual sea que se ejecuten los chunks uno por uno o que se use "Knit".
-   - Instalar los paquetes necesarios (solo la primera vez; si R avisa que algún paquete
-     está "en uso", reiniciar la sesión con Session → Restart R y reintentar):
-     ```r
-     install.packages(c("here", "readxl", "dplyr", "tidyr", "purrr", "stringr", "ggplot2", "scales"))
-     ```
-   - Para generar el informe técnico en PDF también se necesita una distribución de LaTeX
-     (ya instalada en este equipo vía `tinytex::install_tinytex()`).
+   Ojo con esto: hay que abrir `ipc.Rproj` con doble clic, no el `.Rmd`
+   suelto desde el explorador de archivos — así las rutas a los datos
+   funcionan bien. La primera vez hay que instalar los paquetes que uso:
+   ```r
+   install.packages(c("here", "readxl", "dplyr", "tidyr", "purrr", "stringr", "ggplot2", "scales"))
+   ```
+   Para sacar el informe en PDF también hace falta tener LaTeX instalado
+   (yo lo instalé con `tinytex::install_tinytex()`).
 
-3. **Ejecutar el notebook de análisis**
-   - Abrir `notebook/analisis_ipc.Rmd`.
-   - Ejecutar todos los chunks en orden (Run → Run All), o hacer clic en "Knit".
-   - Este script:
-     - Carga los 7 archivos crudos desde `datos/crudos/` y los combina en una sola serie mensual.
-     - Limpia y estructura los datos (extrae el mes desde el nombre del archivo, filtra el año
-       2026, corrige nombres de columnas y de divisiones).
-     - Guarda el resultado limpio en `datos/procesados/serie_total_ipc.csv` y
-       `datos/procesados/divisiones_ipc.csv`.
-     - Calcula estadísticas descriptivas (resumen de la variación mensual y anual).
-     - Genera las tres visualizaciones y las guarda como .png en `salidas/`.
+3. **Correr el notebook**
+   Abrir `notebook/analisis_ipc.Rmd` y correr todos los chunks en orden, o
+   darle "Knit". Esto lee los 7 archivos, los limpia, guarda las tablas
+   limpias en CSV, saca unas estadísticas rápidas y genera los tres
+   gráficos en `salidas/`.
 
-4. **Generar el informe técnico**
-   - Abrir `documentacion/informe_tecnico.Rmd`.
-   - Revisar y completar cada sección con los resultados obtenidos en el paso 3.
-   - Hacer clic en "Knit to PDF" para generar el PDF final (máx. 6 páginas, sin contar
-     portada ni referencias).
+4. **Armar el informe**
+   Abrir `documentacion/informe_tecnico.Rmd`, completar cada parte con lo
+   que salió del notebook, y darle "Knit to PDF". La versión que terminé
+   entregando quedó guardada en `entrega/entrega_informe_ipc.pdf`.
 
-5. **Dashboard / visualizaciones finales**
-   - Los tres gráficos generados en `salidas/` (tendencia del IPC, variación por división en
-     julio, y promedio por división del periodo) cumplen el mínimo de dos visualizaciones
-     distintas que pide la guía, con títulos, ejes y unidades claros para una persona sin
-     formación técnica.
+## Qué hace cada parte del notebook (`analisis_ipc.Rmd`)
 
-## Historial de versiones
+**Chunk 1 — Cargar las librerías.** Acá cargo todo lo que voy a necesitar:
+`here` para que las rutas funcionen sin importar en qué computador esté
+trabajando, `readxl` para leer los Excel del DANE, `dplyr` y `tidyr` para
+acomodar los datos, `purrr` para no repetir el mismo código 7 veces (una
+por archivo), `stringr` para limpiar texto, y `ggplot2` con `scales` para
+los gráficos.
 
-Este proyecto se entrega en dos momentos de avance (ver control de versiones / Git, o los
-archivos fechados si no se usa Git):
+**Chunk 2 — Ver dónde estoy parada.** Solo corro `getwd()` para confirmar
+en qué carpeta está trabajando R antes de seguir.
 
-- **Entrega 1:** adquisición + limpieza de datos (carpeta `datos/` completa, notebook
-  ejecutado hasta la sección de análisis exploratorio).
-- **Entrega 2:** análisis exploratorio + visualizaciones + idea de intervención + informe
-  técnico completo.
+**Chunk 3 — Buscar los archivos.** Busco los 7 Excel dentro de
+`datos/crudos/`. También armo una tablita que traduce la abreviatura del
+nombre del archivo —tipo "jul"— al nombre completo del mes, y una función
+que saca esa abreviatura del nombre del archivo, para no escribirla a mano
+cada vez.
 
-## Alcance y limitaciones
+**Chunk 4 — Leer la serie total.** Armo una función que lee la hoja donde
+está la serie total del IPC de cada Excel, la aplico a los 7 archivos de
+una vez, y junto todo en una sola tabla ordenada por fecha.
 
-Este ejercicio evalúa el proceso de construcción de un flujo de datos reproducible y el
-planteamiento de una idea de intervención — **no** la estimación de un modelo econométrico,
-ni el diseño o evaluación formal de la intervención propuesta (eso se profundiza en
-Econometría Básica y en Evaluación de Impacto). El periodo analizado (enero-julio de 2026)
-es corto, por lo que no permite observar estacionalidad ni tendencias de largo plazo.
+**Chunk 5 — Leer el detalle por división.** Lo mismo, pero para la hoja
+que trae el detalle por cada división de gasto. Tuve que apuntar a un
+rango de celdas específico porque esa hoja trae más columnas de las que
+necesito.
+
+**Chunk 6 — Armar la tabla de divisiones.** Aplico la función anterior a
+los 7 archivos, limpio algunos nombres que traían espacios de más, y armo
+la tabla final con el detalle de las 12 divisiones en los 7 meses.
+
+**Chunk 7 — Revisar que no falte nada.** Reviso que las dos tablas tengan
+el número de filas que deberían tener y que no haya ningún dato vacío. Ya
+con eso, guardo ambas como CSV para no tener que releer los Excel cada vez.
+
+**Chunk 8 — Mirar los números en general.** Saco mínimo, máximo, promedio
+y cuartiles de la variación mensual y anual, solo para tener una idea
+general antes de graficar.
+
+**Chunk 9 — Primer gráfico.** Muestra cómo se mueve la variación mensual
+comparada con la anual a lo largo de los 7 meses. Lo guardo como imagen.
+
+**Chunk 10 — Segundo gráfico.** Me quedo solo con julio, el mes más
+reciente, y muestro cuánto subió o bajó cada división ese mes.
+
+**Chunk 11 — Tercer gráfico.** Ahora miro el promedio de los 7 meses
+completos, para ver qué divisiones subieron más en promedio y no solo en
+el último mes.
+
+## Hasta dónde llega esto
+
+Este trabajo se queda en armar el flujo de datos y plantear la idea de
+intervención — no llegué a estimar ningún modelo, ni a diseñar o evaluar
+la intervención a fondo. El periodo que miré (enero-julio de 2026) es
+corto, así que no alcanza para ver patrones de estacionalidad o
+tendencias de más largo plazo.

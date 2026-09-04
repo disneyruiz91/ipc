@@ -7,6 +7,13 @@ output:
   html_document: default
   word_document: default
 ---
+### Chunk 1 — Librerías
+Acá cargo todos los paquetes que voy a necesitar: `here` para que las rutas de 
+archivo funcionen sin importar en qué computador esté trabajando, `readxl` para 
+poder leer los Excel del DANE, `dplyr` y `tidyr` para acomodar los datos, `purrr` 
+para no tener que repetir el mismo código 7 veces (una por archivo), `stringr` 
+para limpiar texto, y `ggplot2` con `scales` para los gráficos.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
@@ -21,10 +28,19 @@ library(ggplot2)
 library(scales)
 ```
 
+### Chunk 2 — Dónde estoy parada
+Solo corro `getwd()` para confirmar en qué carpeta está trabajando R antes de 
+seguir — un chequeo rápido para no tener sorpresas después.
 
 ```{r}
 getwd()
 ```
+### Chunk 3 — Buscar los archivos y preparar el terreno
+Aquí busco los 7 archivos Excel dentro de `datos/crudos/`. También armo una 
+tablita (`meses_lookup`) que me sirve para traducir la abreviatura del nombre del 
+archivo —tipo "jul"— al nombre completo del mes, y una función 
+(`extraer_abrev`) que saca esa abreviatura directamente del nombre del archivo, 
+para no tener que escribirla a mano cada vez.
 
 ```{r}
 ruta_crudos <- here("datos", "crudos")
@@ -43,7 +59,11 @@ extraer_abrev <- function(nombre_archivo) {
   str_extract(basename(nombre_archivo), "(?<=anex-IPC-)[a-z]{3}(?=2026)")
 }
 ```
-
+### Chunk 4 — Leer la serie total
+Acá armo la función que lee la hoja "1" de cada Excel, que es donde está la 
+serie total del IPC (variación mensual, año corrido y anual). Después la aplico 
+a los 7 archivos de una sola vez y junto todo en la tabla `serie_total`, ya 
+ordenada por fecha.
 ```{r}
 leer_total_mes <- function(archivo) {
   abrev <- extraer_abrev(archivo)
@@ -64,6 +84,10 @@ serie_total <- map_dfr(archivos, leer_total_mes) %>%
 
 serie_total
 ```
+### Chunk 5 — Leer el detalle por división
+Lo mismo que el chunk anterior, pero para la hoja "2", que trae el detalle por 
+las 12 divisiones de gasto. Tuve que usar un rango de celdas específico porque 
+esta hoja trae más columnas de las que realmente necesito.
 
 ```{r}
 leer_divisiones_mes <- function(archivo) {
@@ -80,6 +104,11 @@ leer_divisiones_mes <- function(archivo) {
 }
 ```
 
+### Chunk 6 — Armar la tabla de divisiones
+Aplico la función del chunk anterior a los 7 archivos, limpio algunos nombres de 
+división que traían espacios de más, y armo la tabla final `divisiones` — 84 
+filas en total (12 divisiones por 7 meses).
+
 ```{r}
 # Este chunk faltaba: aquí sí se USA la función de arriba para construir
 # el objeto "divisiones" (antes el archivo pasaba directo a usarlo sin crearlo).
@@ -95,6 +124,12 @@ divisiones <- map_dfr(archivos, leer_divisiones_mes) %>%
 divisiones
 ```
 
+### Chunk 7 — Revisar que todo esté completo
+Antes de seguir, reviso que `serie_total` tenga sus 7 filas y `divisiones` sus 
+84, y que no haya ningún dato faltante en ninguna de las dos. Ya con esa 
+confianza, guardo ambas tablas como CSV en `datos/procesados/`, para no tener 
+que volver a leer los Excel originales cada vez que quiera trabajar con ellas.
+
 ```{r}
 # Verificación: 7 meses en la serie total, 12 divisiones x 7 meses en el detalle
 nrow(serie_total)   # esperado: 7
@@ -109,12 +144,17 @@ dir.create(here("datos", "procesados"), showWarnings = FALSE)
 write.csv(serie_total, here("datos", "procesados", "serie_total_ipc.csv"), row.names = FALSE)
 write.csv(divisiones, here("datos", "procesados", "divisiones_ipc.csv"), row.names = FALSE)
 ```
+### Chunk 8 — Un vistazo rápido a los números
+Saco mínimo, máximo, promedio y cuartiles de la variación mensual y anual, solo 
+para tener una idea general de los datos antes de empezar a graficar.
 
 ```{r}
 summary(serie_total$var_mensual)
 summary(serie_total$var_anual)
 ```
-
+### Chunk 9 — Primer gráfico: la tendencia
+Este gráfico compara cómo se mueve la variación mensual contra la anual a lo 
+largo de los 7 meses. Lo guardo como imagen en `salidas/01_tendencia_ipc.png`.
 
 ```{r}
 # Gráfico 1: evolución de la variación mensual y anual del IPC (ene-jul 2026)
@@ -143,6 +183,9 @@ grafico_tendencia
 dir.create(here("salidas"), showWarnings = FALSE)
 ggsave(here("salidas", "01_tendencia_ipc.png"), grafico_tendencia, width = 8, height = 5, dpi = 150)
 ```
+### Chunk 10 — Segundo gráfico: julio por división
+Me quedo solo con julio —el mes más reciente— y armo un gráfico de barras 
+mostrando cuánto subió o bajó cada división ese mes, de mayor a menor.
 
 ```{r fig.width=9, fig.height=6}
 # Gráfico 2: variación mensual por división de gasto, julio 2026 (mes más reciente)
@@ -158,8 +201,13 @@ caption = "Fuente: DANE, boletín técnico IPC julio 2026 (anexo)"
 ) +
 theme_minimal(base_size = 12)
 grafico_divisiones
+ggsave(here("salidas", "02_divisiones_julio.png"), grafico_divisiones, width = 9, height = 6, dpi = 150)
 ```
 
+### Chunk 11 — Tercer gráfico: el promedio del periodo
+Acá ya no me fijo solo en julio, sino en el promedio de los 7 meses completos, 
+para ver qué divisiones subieron más en promedio y no solo en el último mes. 
+También guardo esta imagen en `salidas/03_promedio_divisiones.png`.
 
 ```{r fig.width=9, fig.height=6}
 # Gráfico 3 (opcional): promedio de variación mensual por división, todo el periodo
